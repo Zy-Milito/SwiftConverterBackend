@@ -12,5 +12,6 @@ namespace Data.Entities
         public required string Symbol { get; set; }
         public required string ISOCode { get; set; }
         public required double ExchangeRate { get; set; }
+        public bool Status { get; set; } = true;
     }
 }

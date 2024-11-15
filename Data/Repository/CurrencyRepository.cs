@@ -17,7 +17,7 @@ namespace Data.Repository
 
         public Currency? GetByCode(string code)
         {
-            return _context.Currencies.Single(c => c.ISOCode == code);
+            return _context.Currencies.FirstOrDefault(c => c.ISOCode == code && c.Status == true);
         }
 
         public void AddCurrency(Currency newCurrency)

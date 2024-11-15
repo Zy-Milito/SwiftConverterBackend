@@ -18,7 +18,7 @@ namespace Data.Repository
 
         public User? GetByUsername(string username)
         {
-            return _context.Users.FirstOrDefault(u => u.Username == username);
+            return _context.Users.FirstOrDefault(u => u.Username == username && u.AccountStatus == true);
         }
 
         public void AddUser(User newUser)
