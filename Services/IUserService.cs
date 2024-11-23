@@ -9,5 +9,6 @@ namespace Services
         UserForView? GetUser(string username);
         void AddUser(UserForCreation userForCreation);
         User? ValidateUser(UserForLogin loginData);
+        bool RemoveUser(string username);
     }
 }

@@ -70,5 +70,17 @@ namespace Services
                 return userToReturn;
             return null;
         }
+
+        public bool RemoveUser(string username)
+        {
+            var user = _userRepository.GetByUsername(username);
+            if (user is null || user.AccountStatus == false)
+            {
+                return false;
+            }
+            user.AccountStatus = false;
+            _userRepository.UpdateUser(user);
+            return true;
+        }
     }
 }

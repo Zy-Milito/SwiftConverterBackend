@@ -27,5 +27,11 @@ namespace Data.Repository
             _context.Users.Add(newUser);
             _context.SaveChanges();
         }
+
+        public void UpdateUser(User user)
+        {
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
     }
 }

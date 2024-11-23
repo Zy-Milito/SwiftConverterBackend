@@ -63,44 +63,5 @@ namespace Web.Controllers
                 return Unauthorized();
             }
         }
-
-        [HttpPost("register")]
-        public IActionResult Register([FromBody] UserForCreation body)
-        {
-            if (string.IsNullOrEmpty(body.Username))
-            {
-                return BadRequest("Please input a valid username.");
-            }
-            if (string.IsNullOrEmpty(body.Password))
-            {
-                return BadRequest("Please input a valid password.");
-            }
-            if (string.IsNullOrEmpty(body.Email))
-            {
-                return BadRequest("Please input a valid email address.");
-            }
-
-            if (body != null)
-            {
-                UserForCreation userForCreation = new()
-                {
-                    Username = body.Username,
-                    Password = body.Password,
-                    Email = body.Email,
-                };
-                _userService.AddUser(userForCreation);
-
-                ResponseForReg regRsp = new ResponseForReg()
-                {
-                    Message = "User created successfully."
-                };
-
-                return CreatedAtAction(nameof(Register), regRsp);
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
     }
 }

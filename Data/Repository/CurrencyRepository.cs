@@ -26,5 +26,11 @@ namespace Data.Repository
             _context.Currencies.Add(newCurrency);
             _context.SaveChanges();
         }
+
+        public void UpdateCurrency(Currency currency)
+        {
+            _context.Currencies.Update(currency);
+            _context.SaveChanges();
+        }
     }
 }

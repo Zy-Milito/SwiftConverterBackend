@@ -62,8 +62,24 @@ namespace Web.Controllers
             }
             else
             {
-                return BadRequest();
+                return BadRequest($"The currency could not be created.");
             }
+        }
+
+        [HttpPut("modify/{ISOCode}")]
+        public IActionResult ModifyRate([FromBody] double newRate, [FromRoute] string ISOCode)
+        {
+            var updated = _currencyService.NewRate(newRate, ISOCode);
+            if (updated) return Ok();
+            return BadRequest("The currency specified could not be removed because it does not exist.");
+        }
+
+        [HttpDelete("{ISOCode}")]
+        public IActionResult Delete([FromRoute] string ISOCode)
+        {
+            var deleted = _currencyService.RemoveCurrency(ISOCode);
+            if (deleted) return Ok();
+            return BadRequest($"The currency specified could not be deleted: already removed or does not exist.");
         }
     }
 }

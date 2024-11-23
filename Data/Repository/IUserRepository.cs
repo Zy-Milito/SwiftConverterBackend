@@ -7,5 +7,6 @@ namespace Data.Repository
         List<User> GetAll();
         User? GetByUsername(string username);
         void AddUser(User newUser);
+        void UpdateUser(User user);
     }
 }

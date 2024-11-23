@@ -16,7 +16,7 @@ namespace Services
         {
             var currencies = _currencyRepository.GetAll();
 
-            return currencies.Select(c => new CurrencyForView()
+            return currencies.Where(c => c.Status == true).Select(c => new CurrencyForView()
             {
                 Name = c.Name,
                 Symbol = c.Symbol,
@@ -55,6 +55,27 @@ namespace Services
                 ExchangeRate = currencyForCreation.ExchangeRate,
             };
             _currencyRepository.AddCurrency(newCurrency);
+        }
+
+        public bool NewRate(double newRate, string ISOCode)
+        {
+            var currency = _currencyRepository.GetByCode(ISOCode);
+            if (currency is null) return false;
+            currency.ExchangeRate = newRate;
+            _currencyRepository.UpdateCurrency(currency);
+            return true;
+        }
+
+        public bool RemoveCurrency(string ISOCode)
+        {
+            var currency = _currencyRepository.GetByCode(ISOCode);
+            if (currency is null || currency.Status == false)
+            {
+                return false;
+            }
+            currency.Status = false;
+            _currencyRepository.UpdateCurrency(currency);
+            return true;
         }
     }
 }
