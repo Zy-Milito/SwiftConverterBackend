@@ -66,7 +66,15 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPut("modify/{ISOCode}")]
+        [HttpPatch("restore/{ISOCode}")]
+        public IActionResult Restore([FromRoute] string ISOCode)
+        {
+            var restored = _currencyService.RestoreCurrency(ISOCode);
+            if (restored) return Ok();
+            return BadRequest("Currency not restored: already restored or does not exist.");
+        }
+
+        [HttpPatch("modify/{ISOCode}")]
         public IActionResult ModifyRate([FromBody] double newRate, [FromRoute] string ISOCode)
         {
             var updated = _currencyService.NewRate(newRate, ISOCode);
@@ -79,7 +87,7 @@ namespace Web.Controllers
         {
             var deleted = _currencyService.RemoveCurrency(ISOCode);
             if (deleted) return Ok();
-            return BadRequest($"The currency specified could not be deleted: already removed or does not exist.");
+            return BadRequest($"Currency not deleted: already removed or does not exist.");
         }
     }
 }

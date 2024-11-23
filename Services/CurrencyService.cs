@@ -16,7 +16,7 @@ namespace Services
         {
             var currencies = _currencyRepository.GetAll();
 
-            return currencies.Where(c => c.Status == true).Select(c => new CurrencyForView()
+            return currencies.Select(c => new CurrencyForView()
             {
                 Name = c.Name,
                 Symbol = c.Symbol,
@@ -62,6 +62,18 @@ namespace Services
             var currency = _currencyRepository.GetByCode(ISOCode);
             if (currency is null) return false;
             currency.ExchangeRate = newRate;
+            _currencyRepository.UpdateCurrency(currency);
+            return true;
+        }
+
+        public bool RestoreCurrency(string ISOCode)
+        {
+            var currency = _currencyRepository.GetByCode(ISOCode);
+            if (currency is null || currency.Status == true)
+            {
+                return false;
+            }
+            currency.Status = true;
             _currencyRepository.UpdateCurrency(currency);
             return true;
         }

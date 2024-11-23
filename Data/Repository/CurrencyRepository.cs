@@ -12,12 +12,12 @@ namespace Data.Repository
 
         public List<Currency> GetAll()
         {
-            return _context.Currencies.ToList();
+            return _context.Currencies.Where(c => c.Status == true).ToList();
         }
 
         public Currency? GetByCode(string code)
         {
-            return _context.Currencies.FirstOrDefault(c => c.ISOCode == code && c.Status == true);
+            return _context.Currencies.FirstOrDefault(c => c.ISOCode == code);
         }
 
         public void AddCurrency(Currency newCurrency)
