@@ -6,14 +6,8 @@ Both the frontend and the backend are being developed simultaneously, with the f
 
 ## To-Do List
 
-### CurrencyController
-
-- Delete,
-- Modify.
-
 ### UserController
 
-- Delete user,
 - Modify user,
 - Fave a currency,
 - Convert currencies.
