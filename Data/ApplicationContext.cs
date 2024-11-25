@@ -21,6 +21,7 @@ namespace Data
             {
                 Id = 1,
                 Name = "Free",
+                Description = "Our Free Plan is perfect for occasional users. Enjoy up to 10 conversions per month at no cost. Ideal for trying out our service and experiencing its core features.",
                 Price = 0,
                 MaxConversions = 10
             };
@@ -28,6 +29,7 @@ namespace Data
             {
                 Id = 2,
                 Name = "Basic",
+                Description = "Upgrade to the Basic Plan and unlock up to 100 conversions. This plan is great for regular users who need more flexibility and higher conversion limits.",
                 Price = 1.91,
                 MaxConversions = 100
             };
@@ -35,6 +37,7 @@ namespace Data
             {
                 Id = 3,
                 Name = "Pro",
+                Description = "For the power users. Experience the full potential of our service with unlimited conversions and no restrictions on your usage!",
                 Price = 5.15,
                 MaxConversions = null
             };
@@ -42,6 +45,7 @@ namespace Data
             {
                 Id = 4,
                 Name = "Trial",
+                Description = "",
                 Price = 0,
                 MaxConversions = 100
             };
