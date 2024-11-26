@@ -23,10 +23,10 @@ namespace Web.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("{username}")]
+        public IActionResult Get(string username)
         {
-            return Ok(_userService.GetUser(id));
+            return Ok(_userService.GetUser(username));
         }
 
         [HttpPost("register")]

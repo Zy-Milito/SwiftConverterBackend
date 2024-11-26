@@ -6,7 +6,7 @@ namespace Services
     public interface IUserService
     {
         List<UserForView> GetAllUsers();
-        UserForView? GetUser(int id);
+        UserForView? GetUser(string username);
         void AddUser(UserForCreation userForCreation);
         User? ValidateUser(UserForLogin loginData);
         bool RemoveUser(int id);

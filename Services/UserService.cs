@@ -30,9 +30,9 @@ namespace Services
             }).ToList();
         }
 
-        public UserForView? GetUser(int id)
+        public UserForView? GetUser(string username)
         {
-            User? user = _userRepository.GetById(id);
+            User? user = _userRepository.GetByUsername(username);
 
             if (user is null)
             {
