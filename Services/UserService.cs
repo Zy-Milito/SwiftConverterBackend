@@ -19,6 +19,7 @@ namespace Services
 
             return users.Select(u => new UserForView()
             {
+                Id = u.Id,
                 Username = u.Username,
                 Email = u.Email,
                 IsAdmin = u.IsAdmin,
@@ -29,9 +30,9 @@ namespace Services
             }).ToList();
         }
 
-        public UserForView? GetUser(string username)
+        public UserForView? GetUser(int id)
         {
-            User? user = _userRepository.GetByUsername(username);
+            User? user = _userRepository.GetById(id);
 
             if (user is null)
             {
@@ -40,6 +41,7 @@ namespace Services
 
             UserForView userForView = new UserForView()
             {
+                Id = user.Id,
                 Username = user.Username,
                 Email = user.Email,
                 IsAdmin = user.IsAdmin,
@@ -71,9 +73,9 @@ namespace Services
             return null;
         }
 
-        public bool RemoveUser(string username)
+        public bool RemoveUser(int id)
         {
-            var user = _userRepository.GetByUsername(username);
+            var user = _userRepository.GetById(id);
             if (user is null || user.AccountStatus == false)
             {
                 return false;

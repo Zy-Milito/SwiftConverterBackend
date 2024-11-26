@@ -23,10 +23,10 @@ namespace Web.Controllers
         }
 
         [Authorize]
-        [HttpGet("{username}")]
-        public IActionResult Get(string username)
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
-            return Ok(_userService.GetUser(username));
+            return Ok(_userService.GetUser(id));
         }
 
         [HttpPost("register")]
@@ -69,12 +69,12 @@ namespace Web.Controllers
         }
 
         [Authorize]
-        [HttpDelete("{username}")]
-        public IActionResult Delete([FromRoute] string username)
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            var deleted = _userService.RemoveUser(username);
+            var deleted = _userService.RemoveUser(id);
             if (deleted) return Ok();
-            return BadRequest($"User {username} could not be deleted: already removed or does not exist.");
+            return BadRequest($"The user could not be deleted: already removed or does not exist.");
         }
     }
 }

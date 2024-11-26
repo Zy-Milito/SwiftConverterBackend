@@ -16,6 +16,11 @@ namespace Data.Repository
             return _context.Users.Include(u => u.SubscriptionPlan).ToList();
         }
 
+        public User? GetById(int id)
+        {
+            return _context.Users.FirstOrDefault(u => u.Id == id && u.AccountStatus == true);
+        }
+
         public User? GetByUsername(string username)
         {
             return _context.Users.FirstOrDefault(u => u.Username == username && u.AccountStatus == true);
