@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Web.Controllers
 {
@@ -23,10 +24,10 @@ namespace Web.Controllers
         }
 
         [Authorize]
-        [HttpGet("{username}")]
-        public IActionResult Get(string username)
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
-            return Ok(_userService.GetUser(username));
+            return Ok(_userService.GetUser(id));
         }
 
         [HttpPost("register")]
@@ -74,7 +75,27 @@ namespace Web.Controllers
         {
             var deleted = _userService.RemoveUser(id);
             if (deleted) return Ok();
-            return BadRequest($"The user could not be deleted: already removed or does not exist.");
+            return BadRequest("The user could not be deleted: already removed or does not exist.");
+        }
+
+        [HttpGet("validation")]
+        public IActionResult Validate([FromHeader(Name = "Authorization")] string token)
+        {
+            var tokenToDecode = token;
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+
+            string subClaimValue = jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+            if (!string.IsNullOrEmpty(subClaimValue) && int.TryParse(subClaimValue, out int sub))
+            {
+                return Ok(_userService.GetUser(sub));
+            }
+            else
+            {
+                return BadRequest("The 'sub' claim is not a valid integer or is missing.");
+            }
+
         }
     }
 }
