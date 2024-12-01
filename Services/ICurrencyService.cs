@@ -7,8 +7,8 @@ namespace Services
         List<CurrencyForView> GetAllCurrencies();
         CurrencyForView? GetCurrency(string code);
         void AddCurrency(CurrencyForCreation currencyForCreation);
-        bool NewRate(double newRate, string ISOCode);
-        bool RestoreCurrency(string ISOCode);
-        bool RemoveCurrency(string ISOCode);
+        void NewRate(double newRate, string ISOCode);
+        void RestoreCurrency(string ISOCode);
+        void RemoveCurrency(string ISOCode);
     }
 }

@@ -27,7 +27,14 @@ namespace Web.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return Ok(_userService.GetUser(id));
+            try
+            {
+                return Ok(_userService.GetUser(id));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost("register")]
@@ -56,7 +63,7 @@ namespace Web.Controllers
                 };
                 _userService.AddUser(userForCreation);
 
-                ResponseForReg regRsp = new ResponseForReg()
+                ResponseForPost regRsp = new ResponseForPost()
                 {
                     Message = "User created successfully."
                 };
@@ -73,9 +80,15 @@ namespace Web.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
-            var deleted = _userService.RemoveUser(id);
-            if (deleted) return Ok();
-            return BadRequest("The user could not be deleted: already removed or does not exist.");
+            try
+            {
+                _userService.RemoveUser(id);
+                return Ok("User removed successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("validation")]
@@ -98,21 +111,35 @@ namespace Web.Controllers
 
         }
 
+        [Authorize]
         [HttpPut("{id}/upgrade-plan")]
         public IActionResult Upgrade([FromRoute] int id, [FromBody] int newPlanId, string newPlanName)
         {
-            var upgraded = _userService.UpgradePlan(id, newPlanId);
-            if (upgraded) return Ok();
-            return BadRequest($"Plan not upgraded: user does not exist or has already subscribed to {newPlanName}.");
+            try
+            {
+                _userService.UpgradePlan(id, newPlanId, newPlanName);
+                return Ok("Subscription upgraded successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [Authorize]
         [HttpPost("{id}/new-conversion")]
         public IActionResult NewConversion([FromRoute] int id, [FromBody] ConversionForCreation newConversion)
         {
             try
             {
                 _userService.AddConversionHistory(id, newConversion);
-                return Ok("Conversion registered successfully.");
+
+                ResponseForPost res = new ResponseForPost()
+                {
+                    Message = "User created successfully."
+                };
+
+                return CreatedAtAction(nameof(NewConversion), res);
             }
             catch (Exception ex)
             {

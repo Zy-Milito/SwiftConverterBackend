@@ -24,7 +24,14 @@ namespace Web.Controllers
         [HttpGet("{id}")]
         public IActionResult Get([FromRoute] int id)
         {
-            return Ok(_subscriptionPlanService.GetCurrentPlan(id));
+            try
+            {
+                return Ok(_subscriptionPlanService.GetCurrentPlan(id));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

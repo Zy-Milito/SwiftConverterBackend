@@ -59,37 +59,37 @@ namespace Services
             _currencyRepository.AddCurrency(newCurrency);
         }
 
-        public bool NewRate(double newRate, string ISOCode)
+        public void NewRate(double newRate, string ISOCode)
         {
             var currency = _currencyRepository.GetByCode(ISOCode);
-            if (currency is null) return false;
+            if (currency is null)
+            {
+                throw new Exception("The currency specified could not be removed because it does not exist.");
+            }
             currency.ExchangeRate = newRate;
             _currencyRepository.UpdateCurrency(currency);
-            return true;
         }
 
-        public bool RestoreCurrency(string ISOCode)
+        public void RestoreCurrency(string ISOCode)
         {
             var currency = _currencyRepository.GetByCode(ISOCode);
             if (currency is null || currency.Status == true)
             {
-                return false;
+                throw new Exception("Currency not restored: already restored or does not exist.");
             }
             currency.Status = true;
             _currencyRepository.UpdateCurrency(currency);
-            return true;
         }
 
-        public bool RemoveCurrency(string ISOCode)
+        public void RemoveCurrency(string ISOCode)
         {
             var currency = _currencyRepository.GetByCode(ISOCode);
             if (currency is null || currency.Status == false)
             {
-                return false;
+                throw new Exception("Currency not deleted: already removed or does not exist.");
             }
             currency.Status = false;
             _currencyRepository.UpdateCurrency(currency);
-            return true;
         }
     }
 }

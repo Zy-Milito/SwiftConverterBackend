@@ -25,7 +25,14 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult Get(string code)
         {
-            return Ok(_currencyService.GetCurrency(code));
+            try
+            {
+                return Ok(_currencyService.GetCurrency(code));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -69,25 +76,43 @@ namespace Web.Controllers
         [HttpPatch("restore/{ISOCode}")]
         public IActionResult Restore([FromRoute] string ISOCode)
         {
-            var restored = _currencyService.RestoreCurrency(ISOCode);
-            if (restored) return Ok();
-            return BadRequest("Currency not restored: already restored or does not exist.");
+            try
+            {
+                _currencyService.RestoreCurrency(ISOCode);
+                return Ok("Currency restored successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("modify/{ISOCode}")]
         public IActionResult ModifyRate([FromBody] double newRate, [FromRoute] string ISOCode)
         {
-            var updated = _currencyService.NewRate(newRate, ISOCode);
-            if (updated) return Ok();
-            return BadRequest("The currency specified could not be removed because it does not exist.");
+            try
+            {
+                _currencyService.NewRate(newRate, ISOCode);
+                return Ok("Currency updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpDelete("{ISOCode}")]
         public IActionResult Delete([FromRoute] string ISOCode)
         {
-            var deleted = _currencyService.RemoveCurrency(ISOCode);
-            if (deleted) return Ok();
-            return BadRequest($"Currency not deleted: already removed or does not exist.");
+            try
+            {
+                _currencyService.RemoveCurrency(ISOCode);
+                return Ok("Currency removed successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

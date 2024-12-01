@@ -77,28 +77,26 @@ namespace Services
             return null;
         }
 
-        public bool RemoveUser(int id)
+        public void RemoveUser(int id)
         {
             var user = _userRepository.GetById(id);
             if (user is null || user.AccountStatus == false)
             {
-                return false;
+                throw new Exception("The user could not be deleted: already removed or does not exist.");
             }
             user.AccountStatus = false;
             _userRepository.UpdateUser(user);
-            return true;
         }
 
-        public bool UpgradePlan(int id, int newPlanId)
+        public void UpgradePlan(int id, int newPlanId, string newPlanName)
         {
             var user = _userRepository.GetById(id);
             if (user is null || user.AccountStatus == false || user.SubscriptionPlan.Id == newPlanId)
             {
-                return false;
+                throw new Exception($"Plan not upgraded: user does not exist or has already subscribed to {newPlanName}.");
             }
             user.SubscriptionPlan.Id = newPlanId;
             _userRepository.UpdateUser(user);
-            return true;
         }
 
         public void AddConversionHistory(int id, ConversionForCreation newConversion)
