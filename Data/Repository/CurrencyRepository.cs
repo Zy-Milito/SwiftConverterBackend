@@ -20,6 +20,11 @@ namespace Data.Repository
             return _context.Currencies.FirstOrDefault(c => c.ISOCode == code);
         }
 
+        public Currency? GetById(int id)
+        {
+            return _context.Currencies.FirstOrDefault(c => c.Id == id);
+        }
+
         public void AddCurrency(Currency newCurrency)
         {
             newCurrency.Id = _context.Currencies.Count() + 1;

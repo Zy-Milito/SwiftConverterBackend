@@ -10,5 +10,7 @@ namespace Services
         void AddUser(UserForCreation userForCreation);
         User? ValidateUser(UserForLogin loginData);
         bool RemoveUser(int id);
+        bool UpgradePlan(int id, int newPlanId);
+        void AddConversionHistory(int id, ConversionForCreation newConversion);
     }
 }

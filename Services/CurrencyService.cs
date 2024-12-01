@@ -18,6 +18,7 @@ namespace Services
 
             return currencies.Select(c => new CurrencyForView()
             {
+                Id = c.Id,
                 Name = c.Name,
                 Symbol = c.Symbol,
                 ISOCode = c.ISOCode,
@@ -36,6 +37,7 @@ namespace Services
 
             CurrencyForView currencyForView = new CurrencyForView()
             {
+                Id = currency.Id,
                 Name = currency.Name,
                 Symbol = currency.Symbol,
                 ISOCode = currency.ISOCode,

@@ -13,17 +13,17 @@ namespace Data.Repository
 
         public List<User> GetAll()
         {
-            return _context.Users.Include(u => u.SubscriptionPlan).ToList();
+            return _context.Users.Include(u => u.SubscriptionPlan).Include(u => u.ConversionHistory).Include(u => u.FavedCurrencies).ToList();
         }
 
         public User? GetById(int id)
         {
-            return _context.Users.FirstOrDefault(u => u.Id == id && u.AccountStatus == true);
+            return _context.Users.Include(u => u.SubscriptionPlan).Include(u => u.ConversionHistory).Include(u => u.FavedCurrencies).FirstOrDefault(u => u.Id == id && u.AccountStatus == true);
         }
 
         public User? GetByUsername(string username)
         {
-            return _context.Users.FirstOrDefault(u => u.Username == username && u.AccountStatus == true);
+            return _context.Users.Include(u => u.SubscriptionPlan).Include(u => u.ConversionHistory).Include(u => u.FavedCurrencies).FirstOrDefault(u => u.Username == username && u.AccountStatus == true);
         }
 
         public void AddUser(User newUser)

@@ -97,5 +97,27 @@ namespace Web.Controllers
             }
 
         }
+
+        [HttpPut("{id}/upgrade-plan")]
+        public IActionResult Upgrade([FromRoute] int id, [FromBody] int newPlanId, string newPlanName)
+        {
+            var upgraded = _userService.UpgradePlan(id, newPlanId);
+            if (upgraded) return Ok();
+            return BadRequest($"Plan not upgraded: user does not exist or has already subscribed to {newPlanName}.");
+        }
+
+        [HttpPost("{id}/new-conversion")]
+        public IActionResult NewConversion([FromRoute] int id, [FromBody] ConversionForCreation newConversion)
+        {
+            try
+            {
+                _userService.AddConversionHistory(id, newConversion);
+                return Ok("Conversion registered successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

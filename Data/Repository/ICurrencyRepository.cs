@@ -6,6 +6,7 @@ namespace Data.Repository
     {
         List<Currency> GetAll();
         Currency? GetByCode(string code);
+        Currency? GetById(int id);
         void AddCurrency(Currency newCurrency);
         void UpdateCurrency(Currency currency);
     }

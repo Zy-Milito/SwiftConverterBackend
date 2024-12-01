@@ -11,6 +11,7 @@ namespace Common.DTO
         public int SubscriptionPlanId { get; set; }
         public ICollection<Currency> FavedCurrencies { get; set; }
         public ICollection<History> ConversionHistory { get; set; }
+        public required string ConversionsLeft { get; set; }
         public bool AccountStatus { get; set; }
     }
 }

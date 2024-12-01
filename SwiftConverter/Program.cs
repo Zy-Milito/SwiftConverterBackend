@@ -41,6 +41,7 @@ builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextO
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 builder.Services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
+builder.Services.AddScoped<IHistoryRepository, HistoryRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();

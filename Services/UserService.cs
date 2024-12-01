@@ -7,9 +7,11 @@ namespace Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private readonly ICurrencyRepository _currencyRepository;
+        public UserService(IUserRepository userRepository, ICurrencyRepository currencyRepository)
         {
             _userRepository = userRepository;
+            _currencyRepository = currencyRepository;
         }
 
         public List<UserForView> GetAllUsers()
@@ -26,6 +28,7 @@ namespace Services
                 SubscriptionPlanId = u.SubscriptionPlanId,
                 FavedCurrencies = u.FavedCurrencies,
                 ConversionHistory = u.ConversionHistory,
+                ConversionsLeft = u.SubscriptionPlan.MaxConversions.HasValue ? (u.SubscriptionPlan.MaxConversions.Value - u.ConversionHistory.Count).ToString() : "unlimited",
                 AccountStatus = u.AccountStatus,
             }).ToList();
         }
@@ -48,6 +51,7 @@ namespace Services
                 SubscriptionPlanId = user.SubscriptionPlanId,
                 FavedCurrencies = user.FavedCurrencies,
                 ConversionHistory = user.ConversionHistory,
+                ConversionsLeft = user.SubscriptionPlan.MaxConversions.HasValue ? (user.SubscriptionPlan.MaxConversions.Value - user.ConversionHistory.Count).ToString() : "unlimited",
                 AccountStatus = user.AccountStatus,
             };
 
@@ -83,6 +87,56 @@ namespace Services
             user.AccountStatus = false;
             _userRepository.UpdateUser(user);
             return true;
+        }
+
+        public bool UpgradePlan(int id, int newPlanId)
+        {
+            var user = _userRepository.GetById(id);
+            if (user is null || user.AccountStatus == false || user.SubscriptionPlan.Id == newPlanId)
+            {
+                return false;
+            }
+            user.SubscriptionPlan.Id = newPlanId;
+            _userRepository.UpdateUser(user);
+            return true;
+        }
+
+        public void AddConversionHistory(int id, ConversionForCreation newConversion)
+        {
+            var user = _userRepository.GetById(id);
+            if (user is null || user.AccountStatus == false)
+            {
+                throw new Exception("User not found.");
+            }
+
+            var fromCurrency = _currencyRepository.GetById(newConversion.FromCurrencyId);
+            var toCurrency = _currencyRepository.GetById(newConversion.ToCurrencyId);
+
+            if (fromCurrency is null || toCurrency is null)
+            {
+                throw new Exception("One or both currencies not found.");
+            }
+
+            var conversionsLeft = user.SubscriptionPlan.MaxConversions.HasValue ? user.SubscriptionPlan.MaxConversions.Value - user.ConversionHistory.Count : int.MaxValue;
+
+            if (conversionsLeft <= 0)
+            {
+                throw new Exception("User has got no conversions left.");
+            }
+
+            var conversionHistory = new History
+            {
+                Date = DateTime.Now,
+                UserId = user.Id,
+                User = user,
+                FromCurrencyId = newConversion.FromCurrencyId,
+                FromCurrency = fromCurrency,
+                ToCurrencyId = newConversion.ToCurrencyId,
+                ToCurrency = toCurrency,
+            };
+
+            user.ConversionHistory.Add(conversionHistory);
+            _userRepository.UpdateUser(user);
         }
     }
 }

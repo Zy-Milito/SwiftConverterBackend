@@ -20,5 +20,11 @@ namespace Web.Controllers
         {
             return Ok(_subscriptionPlanService.GetAllPlans());
         }
+
+        [HttpGet("{id}")]
+        public IActionResult Get([FromRoute] int id)
+        {
+            return Ok(_subscriptionPlanService.GetCurrentPlan(id));
+        }
     }
 }
