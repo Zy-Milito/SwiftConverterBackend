@@ -18,7 +18,7 @@ namespace Data.Repository
 
         public User? GetById(int id)
         {
-            return _context.Users.Include(u => u.SubscriptionPlan).Include(u => u.ConversionHistory).Include(u => u.FavedCurrencies).FirstOrDefault(u => u.Id == id && u.AccountStatus == true);
+            return _context.Users.Include(u => u.SubscriptionPlan).Include(u => u.ConversionHistory).ThenInclude(ch => ch.FromCurrency).Include(u => u.ConversionHistory).ThenInclude(ch => ch.ToCurrency).Include(u => u.FavedCurrencies).FirstOrDefault(u => u.Id == id && u.AccountStatus == true);
         }
 
         public User? GetByUsername(string username)

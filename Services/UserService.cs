@@ -87,7 +87,7 @@ namespace Services
                 throw new Exception("User not found.");
             }
 
-            var history = user.ConversionHistory.Select(ch => new HistoryForView
+            var historyForView = user.ConversionHistory.Select(ch => new HistoryForView
             {
                 Id = ch.Id,
                 Date = ch.Date,
@@ -97,7 +97,7 @@ namespace Services
                 ToCurrency = ch.ToCurrency.ISOCode,
             }).ToList();
 
-            return history;
+            return historyForView;
         }
 
         public void AddUser(UserForCreation userForCreation)
@@ -172,7 +172,7 @@ namespace Services
 
             var conversionHistory = new History
             {
-                Date = DateTime.Now,
+                Date = DateTime.Now.ToString("yyyy-MM-dd HH:00"),
                 UserId = user.Id,
                 User = user,
                 Amount = newConversion.Amount,

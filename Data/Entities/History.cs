@@ -8,7 +8,7 @@ namespace Data.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public required DateTime Date { get; set; } = DateTime.Now;
+        public required string Date { get; set; }
         public int UserId { get; set; }
         public required User User { get; set; } = null!;
         public required double Amount { get; set; }
