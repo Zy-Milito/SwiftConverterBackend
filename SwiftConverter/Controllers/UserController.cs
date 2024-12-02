@@ -143,7 +143,7 @@ namespace Web.Controllers
 
                 ResponseForPost res = new ResponseForPost()
                 {
-                    Message = "User created successfully."
+                    Message = "Conversion saved successfully."
                 };
 
                 return CreatedAtAction(nameof(NewConversion), res);
@@ -165,13 +165,13 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
         }
 
         [Authorize]
         [HttpGet("{id}/favorites")]
-        public IActionResult GetFavorites(int id)
+        public IActionResult GetFavorites([FromRoute] int id)
         {
             try
             {
@@ -179,7 +179,21 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("{id}/history")]
+        public IActionResult GetHistory([FromRoute] int id)
+        {
+            try
+            {
+                return Ok(_userService.GetHistoryById(id));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
             }
         }
     }

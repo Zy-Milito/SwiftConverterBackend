@@ -8,6 +8,7 @@ namespace Services
         List<UserForView> GetAllUsers();
         UserForView? GetUser(int id);
         List<CurrencyForView> GetFavoriteCurrencies(int id);
+        List<HistoryForView> GetHistoryById(int id);
         void AddUser(UserForCreation userForCreation);
         User? ValidateUser(UserForLogin loginData);
         void RemoveUser(int id);

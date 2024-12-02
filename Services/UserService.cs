@@ -79,6 +79,27 @@ namespace Services
             return favorites;
         }
 
+        public List<HistoryForView> GetHistoryById(int id)
+        {
+            var user = _userRepository.GetById(id);
+            if (user is null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            var history = user.ConversionHistory.Select(ch => new HistoryForView
+            {
+                Id = ch.Id,
+                Date = ch.Date,
+                UserId = ch.UserId,
+                Amount = ch.Amount,
+                FromCurrency = ch.FromCurrency.ISOCode,
+                ToCurrency = ch.ToCurrency.ISOCode,
+            }).ToList();
+
+            return history;
+        }
+
         public void AddUser(UserForCreation userForCreation)
         {
             var exists = _userRepository.GetByUsername(userForCreation.Username);
@@ -154,6 +175,7 @@ namespace Services
                 Date = DateTime.Now,
                 UserId = user.Id,
                 User = user,
+                Amount = newConversion.Amount,
                 FromCurrencyId = newConversion.FromCurrencyId,
                 FromCurrency = fromCurrency,
                 ToCurrencyId = newConversion.ToCurrencyId,
