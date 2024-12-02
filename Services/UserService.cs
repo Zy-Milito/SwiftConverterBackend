@@ -58,6 +58,27 @@ namespace Services
             return userForView;
         }
 
+        public List<CurrencyForView> GetFavoriteCurrencies(int id)
+        {
+            var user = _userRepository.GetById(id);
+            if (user is null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            var favorites = user.FavedCurrencies.Select(c => new CurrencyForView
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Symbol = c.Symbol,
+                ISOCode = c.ISOCode,
+                ExchangeRate = c.ExchangeRate,
+                Status = c.Status,
+            }).ToList();
+
+            return favorites;
+        }
+
         public void AddUser(UserForCreation userForCreation)
         {
             var exists = _userRepository.GetByUsername(userForCreation.Username);
@@ -116,7 +137,6 @@ namespace Services
 
             var fromCurrency = _currencyRepository.GetById(newConversion.FromCurrencyId);
             var toCurrency = _currencyRepository.GetById(newConversion.ToCurrencyId);
-
             if (fromCurrency is null || toCurrency is null)
             {
                 throw new Exception("One or both currencies not found.");
@@ -141,6 +161,33 @@ namespace Services
             };
 
             user.ConversionHistory.Add(conversionHistory);
+            _userRepository.UpdateUser(user);
+        }
+
+        public void ToggleFavoriteCurrency(int userId, string code)
+        {
+            var user = _userRepository.GetById(userId);
+            if (user is null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            var currency = _currencyRepository.GetByCode(code);
+            if (currency is null)
+            {
+                throw new Exception("Currency not found.");
+            }
+
+            var existingFavorite = user.FavedCurrencies.FirstOrDefault(c => c.ISOCode == code);
+            if (existingFavorite != null)
+            {
+                user.FavedCurrencies.Remove(existingFavorite);
+            }
+            else
+            {
+                user.FavedCurrencies.Add(currency);
+            }
+
             _userRepository.UpdateUser(user);
         }
     }

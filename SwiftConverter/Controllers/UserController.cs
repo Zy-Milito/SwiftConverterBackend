@@ -153,5 +153,34 @@ namespace Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpPost("{id}/favorites/{code}")]
+        public IActionResult ToggleFavorite([FromRoute] int id, [FromRoute] string code)
+        {
+            try
+            {
+                _userService.ToggleFavoriteCurrency(id, code);
+                return Ok("Favorites updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("{id}/favorites")]
+        public IActionResult GetFavorites(int id)
+        {
+            try
+            {
+                return Ok(_userService.GetFavoriteCurrencies(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
