@@ -6,13 +6,6 @@ Both the frontend and the backend are being developed simultaneously, with the f
 
 ## To-Do List
 
-### UserController
-
-- Modify user,
-- Fave a currency,
-- Convert currencies.
-
 ### HistoryController
 
 - Show user history,
-- Modify user history (create, delete).
