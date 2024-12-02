@@ -60,6 +60,13 @@ namespace Services
 
         public void AddUser(UserForCreation userForCreation)
         {
+            var exists = _userRepository.GetByUsername(userForCreation.Username);
+
+            if (exists != null)
+            {
+                throw new Exception("User already exists.");
+            }
+
             User newUser = new User()
             {
                 Username = userForCreation.Username,

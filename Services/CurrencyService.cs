@@ -23,6 +23,7 @@ namespace Services
                 Symbol = c.Symbol,
                 ISOCode = c.ISOCode,
                 ExchangeRate = c.ExchangeRate,
+                Status = c.Status,
             }).ToList();
         }
 
@@ -42,6 +43,7 @@ namespace Services
                 Symbol = currency.Symbol,
                 ISOCode = currency.ISOCode,
                 ExchangeRate = currency.ExchangeRate,
+                Status = currency.Status,
             };
 
             return currencyForView;
@@ -49,6 +51,13 @@ namespace Services
 
         public void AddCurrency(CurrencyForCreation currencyForCreation)
         {
+            var exists = _currencyRepository.GetByCode(currencyForCreation.ISOCode);
+
+            if (exists != null)
+            {
+                throw new Exception("Currency already exists.");
+            }
+
             Currency newCurrency = new Currency()
             {
                 Name = currencyForCreation.Name,

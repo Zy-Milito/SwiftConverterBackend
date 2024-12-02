@@ -57,19 +57,26 @@ namespace Web.Controllers
 
             if (body != null)
             {
-                CurrencyForCreation currencyForCreation = new()
+                try
                 {
-                    Name = body.Name,
-                    Symbol = body.Symbol,
-                    ISOCode = body.ISOCode,
-                    ExchangeRate = body.ExchangeRate
-                };
-                _currencyService.AddCurrency(currencyForCreation);
-                return Created();
+                    CurrencyForCreation currencyForCreation = new()
+                    {
+                        Name = body.Name,
+                        Symbol = body.Symbol,
+                        ISOCode = body.ISOCode,
+                        ExchangeRate = body.ExchangeRate
+                    };
+                    _currencyService.AddCurrency(currencyForCreation);
+                    return Created();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
             else
             {
-                return BadRequest($"The currency could not be created.");
+                return BadRequest("The currency could not be created.");
             }
         }
 
@@ -87,8 +94,8 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPatch("modify/{ISOCode}")]
-        public IActionResult ModifyRate([FromBody] double newRate, [FromRoute] string ISOCode)
+        [HttpPatch("{ISOCode}/update")]
+        public IActionResult UpdateRate([FromRoute] string ISOCode, [FromBody] double newRate)
         {
             try
             {

@@ -55,24 +55,31 @@ namespace Web.Controllers
 
             if (body != null)
             {
-                UserForCreation userForCreation = new()
+                try
                 {
-                    Username = body.Username,
-                    Password = body.Password,
-                    Email = body.Email,
-                };
-                _userService.AddUser(userForCreation);
+                    UserForCreation userForCreation = new()
+                    {
+                        Username = body.Username,
+                        Password = body.Password,
+                        Email = body.Email,
+                    };
+                    _userService.AddUser(userForCreation);
 
-                ResponseForPost regRsp = new ResponseForPost()
+                    ResponseForPost regRsp = new ResponseForPost()
+                    {
+                        Message = "User created successfully."
+                    };
+
+                    return CreatedAtAction(nameof(Register), regRsp);
+                }
+                catch (Exception ex)
                 {
-                    Message = "User created successfully."
-                };
-
-                return CreatedAtAction(nameof(Register), regRsp);
+                    return BadRequest(ex.Message);
+                }
             }
             else
             {
-                return BadRequest();
+                return BadRequest("Creation unsuccessful.");
             }
         }
 
