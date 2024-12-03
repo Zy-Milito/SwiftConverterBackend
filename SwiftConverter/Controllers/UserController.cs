@@ -120,11 +120,11 @@ namespace Web.Controllers
 
         [Authorize]
         [HttpPut("{id}/upgrade-plan")]
-        public IActionResult Upgrade([FromRoute] int id, [FromBody] int newPlanId, string newPlanName)
+        public IActionResult Upgrade([FromRoute] int id, [FromBody] string newPlanName)
         {
             try
             {
-                _userService.UpgradePlan(id, newPlanId, newPlanName);
+                _userService.UpgradePlan(id, newPlanName);
                 return Ok("Subscription upgraded successfully.");
             }
             catch (Exception ex)

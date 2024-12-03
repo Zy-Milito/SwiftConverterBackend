@@ -8,10 +8,12 @@ namespace Services
     {
         private readonly IUserRepository _userRepository;
         private readonly ICurrencyRepository _currencyRepository;
-        public UserService(IUserRepository userRepository, ICurrencyRepository currencyRepository)
+        private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
+        public UserService(IUserRepository userRepository, ICurrencyRepository currencyRepository, ISubscriptionPlanRepository subscriptionPlanRepository)
         {
             _userRepository = userRepository;
             _currencyRepository = currencyRepository;
+            _subscriptionPlanRepository = subscriptionPlanRepository;
         }
 
         public List<UserForView> GetAllUsers()
@@ -137,14 +139,26 @@ namespace Services
             _userRepository.UpdateUser(user);
         }
 
-        public void UpgradePlan(int id, int newPlanId, string newPlanName)
+        public void UpgradePlan(int id, string newPlanName)
         {
             var user = _userRepository.GetById(id);
-            if (user is null || user.AccountStatus == false || user.SubscriptionPlan.Id == newPlanId)
+            if (user is null || user.AccountStatus == false)
             {
                 throw new Exception($"Plan not upgraded: user does not exist or has already subscribed to {newPlanName}.");
             }
-            user.SubscriptionPlan.Id = newPlanId;
+
+            var newPlan = _subscriptionPlanRepository.GetByName(newPlanName);
+            if (newPlan is null)
+            {
+                throw new Exception($"Plan not upgraded: the plan named {newPlanName} does not exist.");
+            }
+
+            if (user.SubscriptionPlan.Id == newPlan.Id)
+            {
+                throw new Exception($"Plan not upgraded: user has already subscribed to {newPlanName}.");
+            }
+
+            user.SubscriptionPlanId = newPlan.Id;
             _userRepository.UpdateUser(user);
         }
 

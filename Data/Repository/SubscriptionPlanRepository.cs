@@ -14,5 +14,10 @@ namespace Data.Repository
         {
             return _context.SubscriptionPlans.Where(sp => sp.Name != "Trial").ToList();
         }
+
+        public SubscriptionPlan? GetByName(string name)
+        {
+            return _context.SubscriptionPlans.FirstOrDefault(p => p.Name == name);
+        }
     }
 }
