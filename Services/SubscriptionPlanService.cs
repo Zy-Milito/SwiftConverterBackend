@@ -19,6 +19,7 @@ namespace Services
 
             return plans.Select(p => new PlanForView()
             {
+                Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
                 Price = p.Price,
